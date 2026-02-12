@@ -1,0 +1,28 @@
+# Godot-specific ignores
+.godot/
+*.import
+export_presets.cfg
+
+# Mono-specific ignores
+.mono/
+*.sln
+*.csproj
+*.pdb
+*.obj
+
+# System/Tool ignores
+.DS_Store
+Thumbs.db
+
+# Executables
+*.exe
+*.apple
+*.bin
+*.display
+*.elf
+*.exp
+*.isx
+*.nro
+*.nso
+*.package
+*.tpk
