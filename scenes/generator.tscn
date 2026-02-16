@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://rt8qdmsct2um"]
+
+[ext_resource type="Script" uid="uid://cvp8wk2i0oy56" path="res://scripts/generator.gd" id="1_5yxne"]
+[ext_resource type="PackedScene" uid="uid://w0ewblpju7pv" path="res://scenes/tile.tscn" id="2_tile"]
+
+[node name="generator" type="Node2D" unique_id=933046768]
+script = ExtResource("1_5yxne")
+tile_scene = ExtResource("2_tile")
+columns = 28
+rows = 15
+hex_size = 64.0
+spacing = 5.0
