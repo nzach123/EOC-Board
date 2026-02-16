@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://w0ewblpju7pv"]
+
+[ext_resource type="Texture2D" uid="uid://cdsja1iixdnia" path="res://assets/tiles/essentials-4xgames-tileset/base_green.png" id="1_ywnoi"]
+[ext_resource type="Script" uid="uid://bd8ilobqdo3f" path="res://scripts/tile.gd" id="2_jy7pm"]
+
+[node name="Tile" type="Sprite2D" unique_id=75788581]
+texture_filter = 1
+scale = Vector2(2, 2)
+texture = ExtResource("1_ywnoi")
+script = ExtResource("2_jy7pm")
+
+[node name="CoordsLabel" type="Label" parent="." unique_id=74130371]
+offset_left = -32.0
+offset_top = -8.0
+offset_right = 32.0
+offset_bottom = 15.0
+theme_override_font_sizes/font_size = 10
+text = "coords"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="QLabel" type="Label" parent="." unique_id=655249443]
+offset_left = -32.0
+offset_top = -28.0
+offset_bottom = -1.0
+theme_override_font_sizes/font_size = 11
+text = "q"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RLabel" type="Label" parent="." unique_id=895989744]
+offset_top = -28.0
+offset_right = 32.0
+offset_bottom = -1.0
+theme_override_font_sizes/font_size = 11
+text = "r"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SLabel" type="Label" parent="." unique_id=1165478552]
+offset_left = -16.0
+offset_top = 8.0
+offset_right = 16.0
+offset_bottom = 31.0
+theme_override_font_sizes/font_size = 11
+text = "s"
+horizontal_alignment = 1
+vertical_alignment = 1
