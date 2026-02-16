@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://l27vnsj4ylpi"]
 
-[ext_resource type="Texture2D" uid="uid://bl6boewsc8s7g" path="res://assets/hex_cell_NoBG.svg" id="1_0f8qq"]
-[ext_resource type="Script" uid="uid://c44ejxqxf4ym8" path="res://scripts/hex_map.gd" id="2_xhw5p"]
+[ext_resource type="Texture2D" uid="uid://d1ogase5tt30s" path="res://assets/hex_cell_NoBG.svg" id="1_0f8qq"]
+[ext_resource type="Script" uid="uid://c44ejxqxf4ym8" path="res://scripts/old/hex_map.gd" id="2_xhw5p"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x8g1w"]
 texture = ExtResource("1_0f8qq")
