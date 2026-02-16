@@ -32,11 +32,11 @@ func create_cell(x: int, y: int):
 	
 	var tile_pos: Vector2
 	# Flat-top projection from axial-ish coordinates.
-	tile_pos.x = (outer_radius + spacing) * 1.5 * (x-y)
-	tile_pos.y = (inner_radius + spacing) * (x+y)
+	#tile_pos.x = (outer_radius + spacing) * 1.5 * (x-y)
+	#tile_pos.y = (inner_radius + spacing) * (x+y)
 	# Pointy-top alternative (kept for quick switch/testing):
-	#tile_pos.x = (inner_radius + spacing) * (x+y)
-	#tile_pos.y = (outer_radius + spacing) * 1.5 * (x-y)
+	tile_pos.x = (inner_radius + spacing) * (x+y)
+	tile_pos.y = (outer_radius + spacing) * 1.5 * (x-y)
 	tile.global_position = tile_pos
 	tile.pos = Vector2(x,y)
 	
