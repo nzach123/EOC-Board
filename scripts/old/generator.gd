@@ -55,6 +55,7 @@ func generate_neighbor():
 		
 		for v_key in CS.Vdict.keys():
 			test_v = center_v + CS.Vdict[v_key]
-			if datamap.has(test_v): c_tile.Neighbors[v_key] = datamap[test_v]
+			if datamap.has(test_v): 
+				c_tile.Neighbors[v_key] = datamap[test_v]
 		c_tile.update_neighbors()
 	

@@ -1,4 +1,3 @@
-@deprecated
 extends TileMapLayer
 
 @export var grid_weidth: int = 28

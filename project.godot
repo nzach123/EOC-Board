@@ -15,10 +15,6 @@ run/main_scene="uid://rt8qdmsct2um"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
-[autoload]
-
-CS="*uid://bx21p8na3trqy"
-
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/gdscript-linter/plugin.cfg", "res://addons/gut/plugin.cfg")
