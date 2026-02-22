@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 HexMathHelper="*uid://vqm5wdv3tmc6"
+HexPathfinder="*uid://cx0doo7gqa86i"
 
 [editor_plugins]
 

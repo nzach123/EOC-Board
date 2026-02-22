@@ -4,6 +4,7 @@
 [ext_resource type="TileSet" uid="uid://dhsqomjlhi57t" path="res://resources/hex_tile_set.tres" id="2_sugp2"]
 [ext_resource type="Script" uid="uid://lpg3aefmogx1" path="res://scripts/unit.gd" id="3_jyhfs"]
 [ext_resource type="Texture2D" uid="uid://bwlbqrlhj3a4i" path="res://assets/tiles/ElementRenders/Tiles/64/hexagon-pointy-top-darkblue-64.png" id="4_jyhfs"]
+[ext_resource type="Script" uid="uid://updjpn4c1wyo" path="res://scripts/unit_nav_movement.gd" id="5_tbgi4"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tbgi4"]
 radius = 31.144823
@@ -35,6 +36,9 @@ texture = ExtResource("4_jyhfs")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Unit/ClickArea" unique_id=343876768]
 shape = SubResource("CircleShape2D_tbgi4")
+
+[node name="NavMovement" type="Node" parent="Unit" unique_id=1084892088]
+script = ExtResource("5_tbgi4")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=661656610]
 position = Vector2(1266, 669)
