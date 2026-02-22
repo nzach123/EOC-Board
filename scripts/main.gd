@@ -1,5 +1,7 @@
 extends Node2D
 
+@onready var hex_pathfinder: HexPathfinder = $HexPathfinder
+@onready var nav: UnitNavMovement = $Unit/NavMovement
 
 @onready var base_terrian_layer: TileMapLayer = $BaseTerrianLayer
 @onready var crisis_terrian_layer: TileMapLayer = $CrisisTerrianLayer
@@ -13,6 +15,13 @@ var _reachable_cells: Array[Vector2i] = []
 
 func _ready() -> void:
 	unit_node.left_clicked.connect(_on_unit_left_clicked)
+# Build the pathfinder graph — here's the is_walkable Callable:
+	hex_pathfinder.rebuild_graph(func(cell: Vector2i) -> bool:
+		return base_terrian_layer.get_cell_source_id(cell) != -1)
+	# Wire up nav movement
+	nav.setup(hex_pathfinder)
+	nav.path_completed.connect(func(): print("Unit arrived!"))
+	nav.path_failed.connect(func(reason: String): print("Path failed: ", reason))	
 	
 func _on_unit_left_clicked(unit: Node2D) -> void:
 	selected_unit = unit
@@ -26,34 +35,15 @@ func _unhandled_input(event: InputEvent) -> void:
 		_print_hex_tile_coords()
 
 func _move_selected_unit_to_mouse_tile() -> void:
-
-	var cell: Vector2i = base_terrian_layer.local_to_map(base_terrian_layer.get_local_mouse_position())
-	var tile_source_id := base_terrian_layer.get_cell_source_id(cell)
-	
-	if tile_source_id == -1:
-		print("Clicked empty cell", cell)
+	if not is_instance_valid(selected_unit):
 		return
-		
+		_clear_highlights()
+	var cell: Vector2i = base_terrian_layer.local_to_map(base_terrian_layer.get_local_mouse_position())
 	if cell not in _reachable_cells:
 		print("Cell outside movement range: ", cell)
-		return	
-	_clear_highlights()
-	# Assigns the centered local position of the cell to the global position
-	var target_local: Vector2 = base_terrian_layer.map_to_local(cell)
-	var target_global: Vector2 = base_terrian_layer.to_global(target_local)
-
-	_move_unit_to_global(target_global)
-	
-func _move_unit_to_global(target_global: Vector2) -> void:
-	if not is_instance_valid(selected_unit):
-		print("no valid unit selected")
 		return
-		
-	if is_instance_valid(move_tween):
-		move_tween.kill()
-		
-	move_tween = create_tween()
-	move_tween.tween_property(selected_unit, "global_position", target_global, 0.15)
+	nav.move_to_cell(cell)
+
 
 func _show_movement_range(unit: Node2D) -> void:
 	_clear_highlights()

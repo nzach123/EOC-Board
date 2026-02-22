@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://lpg3aefmogx1" path="res://scripts/unit.gd" id="3_jyhfs"]
 [ext_resource type="Texture2D" uid="uid://bwlbqrlhj3a4i" path="res://assets/tiles/ElementRenders/Tiles/64/hexagon-pointy-top-darkblue-64.png" id="4_jyhfs"]
 [ext_resource type="Script" uid="uid://updjpn4c1wyo" path="res://scripts/unit_nav_movement.gd" id="5_tbgi4"]
+[ext_resource type="Script" uid="uid://cx0doo7gqa86i" path="res://scripts/hex_pathfinder.gd" id="6_tefeu"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tbgi4"]
 radius = 31.144823
@@ -37,11 +38,16 @@ texture = ExtResource("4_jyhfs")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Unit/ClickArea" unique_id=343876768]
 shape = SubResource("CircleShape2D_tbgi4")
 
-[node name="NavMovement" type="Node" parent="Unit" unique_id=1084892088]
+[node name="NavMovement" type="Node2D" parent="Unit" unique_id=964739569]
 script = ExtResource("5_tbgi4")
+debug_draw = true
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=661656610]
 position = Vector2(1266, 669)
 zoom = Vector2(0.455, 0.455)
+
+[node name="HexPathfinder" type="Node" parent="." unique_id=2030899562 node_paths=PackedStringArray("tile_layer")]
+script = ExtResource("6_tefeu")
+tile_layer = NodePath("../BaseTerrianLayer")
 
 [connection signal="input_event" from="Unit/ClickArea" to="Unit" method="_on_click_area_input_event"]

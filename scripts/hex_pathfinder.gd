@@ -1,6 +1,6 @@
 extends Node
-
-@export var tile_layer: TileMapLayer
+class_name HexPathfinder
+@export var tile_layer: TileMapLayer 
 
 var astar := AStar2D.new()
 var cell_to_id: Dictionary = {}
@@ -25,7 +25,18 @@ func rebuild_graph(is_walkable: Callable) -> void:
 			if cell_to_id.has(n):
 				astar.connect_points(id, cell_to_id[n])
 	print("HexPathfinder: ", astar.get_point_count(), " walkable cells")
-	
+
+func has_cell(cell: Vector2i) -> bool:
+	return cell_to_id.has(cell) 
+
+func get_cell_path(from_cell: Vector2i, to_cell: Vector2i) -> Array[Vector2i]:
+	var from_id: int = cell_to_id[from_cell]
+	var to_id: int = cell_to_id[to_cell]
+	var id_path := astar.get_id_path(from_id, to_id)
+	var cell_path: Array[Vector2i] = []
+	for id in id_path:
+		cell_path.append(id_to_cell[id])
+	return cell_path
 func cell_to_world(cell: Vector2i) -> Vector2:
 	return tile_layer.to_global(tile_layer.map_to_local(cell))
 	
