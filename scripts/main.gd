@@ -7,9 +7,6 @@ extends Node2D
 
 @onready var unit_node: Node2D = $Unit
 
-var cell: Vector2i
-var tile_source_id: int = -1
-
 var selected_unit: Node2D = null
 var move_tween: Tween
 var _reachable_cells: Array[Vector2i] = []
@@ -50,6 +47,7 @@ func _move_selected_unit_to_mouse_tile() -> void:
 func _move_unit_to_global(target_global: Vector2) -> void:
 	if not is_instance_valid(selected_unit):
 		print("no valid unit selected")
+		return
 		
 	if is_instance_valid(move_tween):
 		move_tween.kill()
@@ -74,11 +72,11 @@ func _clear_highlights() -> void:
 	
 # Hex Tiles Debug
 func _print_hex_tile_coords() -> void:
-	var cell = base_terrian_layer.local_to_map(base_terrian_layer.get_local_mouse_position())
+	var cell: Vector2i = base_terrian_layer.local_to_map(base_terrian_layer.get_local_mouse_position())
 	var atlas_coords := base_terrian_layer.get_cell_atlas_coords(cell)
 	var alt_id := base_terrian_layer.get_cell_alternative_tile(cell)
 
-	tile_source_id = base_terrian_layer.get_cell_source_id(cell)
+	var tile_source_id: int = base_terrian_layer.get_cell_source_id(cell)
 	if tile_source_id == -1:
 		print("Clicked empty cell", cell)
 		return
