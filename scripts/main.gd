@@ -12,6 +12,7 @@ var tile_source_id: int = -1
 
 var selected_unit: Node2D = null
 var move_tween: Tween
+var _reachable_cells: Array[Vector2i] = []
 
 func _ready() -> void:
 	unit_node.left_clicked.connect(_on_unit_left_clicked)
@@ -22,13 +23,13 @@ func _on_unit_left_clicked(unit: Node2D) -> void:
 	_show_movement_range(unit)
 
 func _unhandled_input(event: InputEvent) -> void:
-	# Left click prints tile coordinates
+	# Right click prints tile coordinates
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
 		_move_selected_unit_to_mouse_tile()
 		_print_hex_tile_coords()
 
 func _move_selected_unit_to_mouse_tile() -> void:
-	_clear_highlights()
+
 	var cell: Vector2i = base_terrian_layer.local_to_map(base_terrian_layer.get_local_mouse_position())
 	var tile_source_id := base_terrian_layer.get_cell_source_id(cell)
 	
@@ -36,6 +37,10 @@ func _move_selected_unit_to_mouse_tile() -> void:
 		print("Clicked empty cell", cell)
 		return
 		
+	if cell not in _reachable_cells:
+		print("Cell outside movement range: ", cell)
+		return	
+	_clear_highlights()
 	# Assigns the centered local position of the cell to the global position
 	var target_local: Vector2 = base_terrian_layer.map_to_local(cell)
 	var target_global: Vector2 = base_terrian_layer.to_global(target_local)
@@ -57,11 +62,14 @@ func _show_movement_range(unit: Node2D) -> void:
 	var unit_local: Vector2 = base_terrian_layer.to_local(unit.global_position)
 	var unit_cell: Vector2i = base_terrian_layer.local_to_map(unit_local)
 	var cells_in_range: Array[Vector2i] = HexMathHelper._get_cells_in_range(base_terrian_layer, unit_cell, unit.movement_turns)
+	_reachable_cells = cells_in_range
 	for cell in cells_in_range:
 		highlight_terrian_layer.set_cell(cell, 3, Vector2i.ZERO)
+		
 			
 func _clear_highlights() -> void:
 	highlight_terrian_layer.clear()
+	_reachable_cells.clear()
 	
 	
 # Hex Tiles Debug

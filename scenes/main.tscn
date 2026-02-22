@@ -26,6 +26,7 @@ collision_enabled = false
 [node name="Unit" type="Node2D" parent="." unique_id=1282189805]
 position = Vector2(449, 273)
 script = ExtResource("3_jyhfs")
+movement_turns = 5
 
 [node name="Sprite2D" type="Sprite2D" parent="Unit" unique_id=1761147467]
 texture = ExtResource("4_jyhfs")
