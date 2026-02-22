@@ -19,7 +19,8 @@ func _ready() -> void:
 func _on_unit_left_clicked(unit: Node2D) -> void:
 	selected_unit = unit
 	print("Selected unit: ", unit.name)
-	
+	_show_movement_range(unit)
+
 func _unhandled_input(event: InputEvent) -> void:
 	# Left click prints tile coordinates
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
@@ -27,7 +28,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_print_hex_tile_coords()
 
 func _move_selected_unit_to_mouse_tile() -> void:
-	
+	_clear_highlights()
 	var cell: Vector2i = base_terrian_layer.local_to_map(base_terrian_layer.get_local_mouse_position())
 	var tile_source_id := base_terrian_layer.get_cell_source_id(cell)
 	
@@ -51,7 +52,18 @@ func _move_unit_to_global(target_global: Vector2) -> void:
 	move_tween = create_tween()
 	move_tween.tween_property(selected_unit, "global_position", target_global, 0.15)
 
-
+func _show_movement_range(unit: Node2D) -> void:
+	_clear_highlights()
+	var unit_local: Vector2 = base_terrian_layer.to_local(unit.global_position)
+	var unit_cell: Vector2i = base_terrian_layer.local_to_map(unit_local)
+	var cells_in_range: Array[Vector2i] = HexMathHelper._get_cells_in_range(base_terrian_layer, unit_cell, unit.movement_turns)
+	for cell in cells_in_range:
+		highlight_terrian_layer.set_cell(cell, 3, Vector2i.ZERO)
+			
+func _clear_highlights() -> void:
+	highlight_terrian_layer.clear()
+	
+	
 # Hex Tiles Debug
 func _print_hex_tile_coords() -> void:
 	var cell = base_terrian_layer.local_to_map(base_terrian_layer.get_local_mouse_position())
