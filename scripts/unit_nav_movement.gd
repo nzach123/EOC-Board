@@ -16,11 +16,14 @@ var _pathfinder: HexPathfinder
 @export var debug_draw: bool = false
 
 var _current_path:Array[Vector2i] = []
-var _world_waypoints: PackedVector2Array = []
+var _world_waypoints: PackedVector2Array = PackedVector2Array()
 var _waypoint_index: int = 0
 
 func setup(pathfinder: HexPathfinder) -> void:
 	_pathfinder = pathfinder
+	if unit == null or _pathfinder == null:
+		return
+		
 	var cell := _pathfinder.world_to_cell(get_parent().global_position)
 	get_parent().global_position = _pathfinder.cell_to_world(cell)
 	
@@ -59,9 +62,13 @@ func move_to_world(target_world: Vector2) -> bool:
 	return move_to_cell(_pathfinder.world_to_cell(target_world))
 
 func _process(delta: float) -> void:
+	if _state == State.IDLE:
+		return
+
 	if _waypoint_index >= _world_waypoints.size():
 		_arrive()
 		return
+
 	var target: Vector2 = _world_waypoints[_waypoint_index]
 	unit.global_position = unit.global_position.move_toward(target, move_speed * delta)
 	
