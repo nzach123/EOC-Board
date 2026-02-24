@@ -1,8 +1,14 @@
 [gd_resource type="TileSet" format=3 uid="uid://dhsqomjlhi57t"]
 
 [ext_resource type="Texture2D" uid="uid://dqfpvlfxyeugx" path="res://assets/tiles/ElementRenders/Tiles/64/hexagon_pointy_top_white_64.png" id="1_euxoe"]
+[ext_resource type="Texture2D" uid="uid://dyqbvaueo4ude" path="res://assets/tiles/ElementRenders/Tiles/64/hexagon-pointy-top--highlight-yellow-64.png" id="1_m7dfc"]
 [ext_resource type="Texture2D" uid="uid://br5d0vad8cpu3" path="res://assets/tiles/ElementRenders/Tiles/64/hexagon-pointy-top-red-64.png" id="2_m7dfc"]
 [ext_resource type="Texture2D" uid="uid://dilc05f00serr" path="res://assets/tiles/ElementRenders/Tiles/64/hexagon-pointy-top-green-64.png" id="3_2vdlh"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2vdlh"]
+texture = ExtResource("1_m7dfc")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dg7nb"]
 texture = ExtResource("1_euxoe")
@@ -29,3 +35,4 @@ custom_data_layer_1/type = 2
 sources/1 = SubResource("TileSetAtlasSource_dg7nb")
 sources/2 = SubResource("TileSetAtlasSource_75lj6")
 sources/3 = SubResource("TileSetAtlasSource_sid38")
+sources/0 = SubResource("TileSetAtlasSource_2vdlh")

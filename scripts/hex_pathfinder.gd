@@ -21,6 +21,10 @@ func rebuild_graph(is_walkable: Callable) -> void:
 			next_id += 1
 	for cell in cell_to_id.keys():
 		var id = cell_to_id[cell]
+		# Set point weight from per-tile movement_cost custom data
+		var tile_data: TileData = tile_layer.get_cell_tile_data(cell)
+		if tile_data:
+			astar.set_point_weight_scale(id, maxi(tile_data.get_custom_data("move_cost"), 1))
 		for n in tile_layer.get_surrounding_cells(cell):
 			if cell_to_id.has(n):
 				astar.connect_points(id, cell_to_id[n])

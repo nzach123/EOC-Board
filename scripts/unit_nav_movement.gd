@@ -12,7 +12,7 @@ var _state: State = State.IDLE
 var _pathfinder: HexPathfinder
 
 @export var move_speed: float = 300.0
-@export var arrival_disatance: float = 2.0
+@export var arrival_distance: float = 2.0
 @export var debug_draw: bool = false
 
 var _current_path:Array[Vector2i] = []
@@ -23,12 +23,12 @@ func setup(pathfinder: HexPathfinder) -> void:
 	_pathfinder = pathfinder
 	if unit == null or _pathfinder == null:
 		return
-		
-	var cell := _pathfinder.world_to_cell(get_parent().global_position)
-	get_parent().global_position = _pathfinder.cell_to_world(cell)
+
+	var cell := _pathfinder.world_to_cell(unit.global_position)
+	unit.global_position = _pathfinder.cell_to_world(cell)
 	
 func move_to_cell(target_cell: Vector2i) -> bool:
-	var unit_cell: Vector2i = _pathfinder.world_to_cell(get_parent().global_position)
+	var unit_cell: Vector2i = _pathfinder.world_to_cell(unit.global_position)
 	if unit_cell == target_cell:
 		path_completed.emit()
 		return true
@@ -72,7 +72,7 @@ func _process(delta: float) -> void:
 	var target: Vector2 = _world_waypoints[_waypoint_index]
 	unit.global_position = unit.global_position.move_toward(target, move_speed * delta)
 	
-	if unit.global_position.distance_to(target) <= arrival_disatance:
+	if unit.global_position.distance_to(target) <= arrival_distance:
 		unit.global_position = target
 		_waypoint_index +=1
 		

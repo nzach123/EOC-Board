@@ -12,6 +12,7 @@ extends Node2D
 var selected_unit: Node2D = null
 var move_tween: Tween
 var _reachable_cells: Array[Vector2i] = []
+var _pending_path_cost: int = 0
 
 func _ready() -> void:
 	unit_node.left_clicked.connect(_on_unit_left_clicked)
@@ -20,9 +21,17 @@ func _ready() -> void:
 		return base_terrian_layer.get_cell_source_id(cell) != -1)
 	# Wire up nav movement
 	nav.setup(hex_pathfinder)
-	nav.path_completed.connect(func(): print("Unit arrived!"))
+	nav.path_completed.connect(_on_unit_arrived)
 	nav.path_failed.connect(func(reason: String): print("Path failed: ", reason))	
 	
+func _on_unit_arrived()-> void:
+	
+	if not is_instance_valid(selected_unit):
+		return
+	selected_unit.deduct_movement(_pending_path_cost)
+	_pending_path_cost = 0
+	
+
 func _on_unit_left_clicked(unit: Node2D) -> void:
 	selected_unit = unit
 	print("Selected unit: ", unit.name)
@@ -37,19 +46,29 @@ func _unhandled_input(event: InputEvent) -> void:
 func _move_selected_unit_to_mouse_tile() -> void:
 	if not is_instance_valid(selected_unit):
 		return
-		_clear_highlights()
 	var cell: Vector2i = base_terrian_layer.local_to_map(base_terrian_layer.get_local_mouse_position())
 	if cell not in _reachable_cells:
+		_clear_highlights()
 		print("Cell outside movement range: ", cell)
 		return
+	var original_cell: Vector2i = base_terrian_layer.local_to_map(base_terrian_layer.to_local(selected_unit.global_position))
+	var path: Array[Vector2i] = hex_pathfinder.get_cell_path(original_cell, cell)
+	_pending_path_cost = 0
+	for i in range(1, path.size()):  # skip the starting tile
+		var tile_data: TileData = base_terrian_layer.get_cell_tile_data(path[i])
+		if tile_data:
+			_pending_path_cost += maxi(tile_data.get_custom_data("move_cost"), 1)
+		else:
+			_pending_path_cost += 1  # fallback
 	nav.move_to_cell(cell)
+	_clear_highlights()
 
 
 func _show_movement_range(unit: Node2D) -> void:
 	_clear_highlights()
 	var unit_local: Vector2 = base_terrian_layer.to_local(unit.global_position)
 	var unit_cell: Vector2i = base_terrian_layer.local_to_map(unit_local)
-	var cells_in_range: Array[Vector2i] = HexMathHelper._get_cells_in_range(base_terrian_layer, unit_cell, unit.movement_turns)
+	var cells_in_range: Array[Vector2i] = HexMathHelper._get_cells_in_range(base_terrian_layer, unit_cell, unit.movement_remaning)
 	_reachable_cells = cells_in_range
 	for cell in cells_in_range:
 		highlight_terrian_layer.set_cell(cell, 3, Vector2i.ZERO)
