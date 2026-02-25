@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://cuq7y8vktda80"]
+
+[ext_resource type="Script" uid="uid://lpg3aefmogx1" path="res://scripts/unit.gd" id="1_1jvru"]
+[ext_resource type="Texture2D" uid="uid://bwlbqrlhj3a4i" path="res://assets/tiles/ElementRenders/Tiles/64/hexagon-pointy-top-darkblue-64.png" id="2_gic7v"]
+[ext_resource type="Script" uid="uid://updjpn4c1wyo" path="res://scripts/unit_nav_movement.gd" id="3_tb304"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tbgi4"]
+radius = 31.144823
+
+[node name="Unit" type="Node2D" unique_id=1104716451]
+script = ExtResource("1_1jvru")
+movement_turns = 8
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1462116113]
+texture = ExtResource("2_gic7v")
+
+[node name="ClickArea" type="Area2D" parent="." unique_id=1700497586]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClickArea" unique_id=182389889]
+shape = SubResource("CircleShape2D_tbgi4")
+
+[node name="NavMovement" type="Node2D" parent="." unique_id=636537194]
+script = ExtResource("3_tb304")
+debug_draw = true
+
+[connection signal="input_event" from="ClickArea" to="." method="_on_click_area_input_event"]

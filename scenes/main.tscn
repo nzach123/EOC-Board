@@ -2,14 +2,9 @@
 
 [ext_resource type="Script" uid="uid://dbbir0fxvkybm" path="res://scripts/main.gd" id="1_sugp2"]
 [ext_resource type="TileSet" uid="uid://dhsqomjlhi57t" path="res://resources/hex_tile_set.tres" id="2_sugp2"]
-[ext_resource type="Script" uid="uid://lpg3aefmogx1" path="res://scripts/unit.gd" id="3_jyhfs"]
-[ext_resource type="Texture2D" uid="uid://bwlbqrlhj3a4i" path="res://assets/tiles/ElementRenders/Tiles/64/hexagon-pointy-top-darkblue-64.png" id="4_jyhfs"]
-[ext_resource type="Script" uid="uid://updjpn4c1wyo" path="res://scripts/unit_nav_movement.gd" id="5_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://cuq7y8vktda80" path="res://scenes/unit.tscn" id="3_tbgi4"]
 [ext_resource type="Script" uid="uid://cx0doo7gqa86i" path="res://scripts/hex_pathfinder.gd" id="6_tefeu"]
 [ext_resource type="Script" uid="uid://ddrif5id3covl" path="res://scripts/unit_debugger_manager.gd" id="7_o6xl0"]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_tbgi4"]
-radius = 31.144823
 
 [node name="Main" type="Node2D" unique_id=2003295805]
 script = ExtResource("1_sugp2")
@@ -30,22 +25,8 @@ tile_set = ExtResource("2_sugp2")
 tile_set = ExtResource("2_sugp2")
 collision_enabled = false
 
-[node name="Unit" type="Node2D" parent="." unique_id=1282189805]
+[node name="Unit" parent="." unique_id=1104716451 instance=ExtResource("3_tbgi4")]
 position = Vector2(449, 273)
-script = ExtResource("3_jyhfs")
-movement_turns = 8
-
-[node name="Sprite2D" type="Sprite2D" parent="Unit" unique_id=1761147467]
-texture = ExtResource("4_jyhfs")
-
-[node name="ClickArea" type="Area2D" parent="Unit" unique_id=1557024974]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Unit/ClickArea" unique_id=343876768]
-shape = SubResource("CircleShape2D_tbgi4")
-
-[node name="NavMovement" type="Node2D" parent="Unit" unique_id=964739569]
-script = ExtResource("5_tbgi4")
-debug_draw = true
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=661656610]
 position = Vector2(1266, 669)
@@ -58,4 +39,4 @@ tile_layer = NodePath("../BaseTerrianLayer")
 [node name="UnitDebugManager" type="Node2D" parent="." unique_id=1964897580]
 script = ExtResource("7_o6xl0")
 
-[connection signal="input_event" from="Unit/ClickArea" to="Unit" method="_on_click_area_input_event"]
+[node name="MovementHighlight" type="Node" parent="." unique_id=1286503250]

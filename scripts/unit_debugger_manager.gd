@@ -4,6 +4,11 @@ class_name UnitDebugManager
 # Maintain a list of units we want to draw paths for.
 # You can append to this when selecting units, or keep it tracking all units.
 var active_units: Array[Node2D] = []
+var _preview_path: PackedVector2Array = PackedVector2Array()
+
+func set_preview_path(path: PackedVector2Array) -> void:
+	_preview_path = path
+	queue_redraw()
 
 func _ready() -> void:
 	z_index = 100
@@ -34,23 +39,37 @@ func _process(_delta: float) -> void:
 		queue_redraw()
 
 func _draw() -> void:
+	_draw_active_units_paths()
+	_draw_preview_path()
+
+func _draw_active_units_paths() -> void:
 	for unit in active_units:
 		if not is_instance_valid(unit) or not unit.has_node("NavMovement"):
 			continue
 			  
 		var nav: UnitNavMovement = unit.get_node("NavMovement")
-		
 		if nav._world_waypoints.is_empty():
 			continue
 
-		var points_to_draw: PackedVector2Array = PackedVector2Array()
-		
-		# Convert global coordinates to the Node2D's local space for accurate drawing.
-		points_to_draw.append(to_local(unit.global_position))
+		var world_points: PackedVector2Array = PackedVector2Array()
+		world_points.append(unit.global_position)
 		for i in range(nav._waypoint_index, nav._world_waypoints.size()):
-			points_to_draw.append(to_local(nav._world_waypoints[i]))
+			world_points.append(nav._world_waypoints[i])
 			
-		if points_to_draw.size() >= 2:
-			draw_polyline(points_to_draw, Color.YELLOW, 2.0)
-		for point in points_to_draw:
-			draw_circle(point, 5.0, Color.RED)
+		_draw_world_path(world_points, Color.YELLOW, Color.RED, 2.0, 5.0)
+
+func _draw_preview_path() -> void:
+	if _preview_path.size() >= 2:
+		_draw_world_path(_preview_path, Color.CYAN, Color.CYAN, 3.0, 4.0)
+
+func _draw_world_path(world_points: PackedVector2Array, line_color: Color, point_color: Color, line_width: float = 2.0, point_radius: float = 5.0) -> void:
+	var local_points: PackedVector2Array = PackedVector2Array()
+	# Convert global coordinates to the Node2D's local space for accurate drawing.
+	for wp in world_points:
+		local_points.append(to_local(wp))
+		
+	if local_points.size() >= 2:
+		draw_polyline(local_points, line_color, line_width)
+		
+	for pt in local_points:
+		draw_circle(pt, point_radius, point_color)

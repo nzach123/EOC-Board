@@ -13,7 +13,10 @@ extends Node2D
 var selected_unit: Node2D = null
 var move_tween: Tween
 var _reachable_cells: Array[Vector2i] = []
+var _reachable_set: Dictionary = {}
 var _pending_path_cost: int = 0
+var _preview_path: PackedVector2Array = PackedVector2Array()
+var _last_hover_cell: Vector2i = Vector2i(-99999, -99999)
 
 func _ready() -> void:
 	unit_node.left_clicked.connect(_on_unit_left_clicked)
@@ -40,6 +43,44 @@ func _on_unit_left_clicked(unit: Node2D) -> void:
 	debug_manager.set_active_unit(unit)
 	print("Selected unit: ", unit.name)
 	_show_movement_range(unit)
+
+func _process(_delta: float) -> void:
+	if not is_instance_valid(selected_unit) or _reachable_cells.is_empty():
+		if not _preview_path.is_empty():
+			_preview_path.clear()
+			debug_manager.set_preview_path(_preview_path)
+		return
+
+	var mouse_cell: Vector2i = base_terrian_layer.local_to_map(
+		base_terrian_layer.get_local_mouse_position())
+
+	# Skip recalc if still on the same cell
+	if mouse_cell == _last_hover_cell:
+		return
+	_last_hover_cell = mouse_cell
+
+	# Only preview if mouse is inside the reachable area (O(1) lookup)
+	if not _reachable_set.has(mouse_cell):
+		_preview_path.clear()
+		debug_manager.set_preview_path(_preview_path)
+		return
+
+	var unit_cell: Vector2i = base_terrian_layer.local_to_map(
+		base_terrian_layer.to_local(selected_unit.global_position))
+
+	# Guard: both cells must be in the pathfinder graph
+	if not hex_pathfinder.has_cell(unit_cell) or not hex_pathfinder.has_cell(mouse_cell):
+		_preview_path.clear()
+		debug_manager.set_preview_path(_preview_path)
+		return
+
+	var cell_path: Array[Vector2i] = hex_pathfinder.get_cell_path(unit_cell, mouse_cell)
+
+	_preview_path.clear()
+	for cell in cell_path:
+		_preview_path.append(hex_pathfinder.cell_to_world(cell))
+
+	debug_manager.set_preview_path(_preview_path)
 
 func _unhandled_input(event: InputEvent) -> void:
 	# Right click prints tile coordinates
@@ -74,13 +115,19 @@ func _show_movement_range(unit: Node2D) -> void:
 	var unit_cell: Vector2i = base_terrian_layer.local_to_map(unit_local)
 	var cells_in_range: Array[Vector2i] = HexMathHelper._get_cells_in_range(base_terrian_layer, unit_cell, unit.movement_remaning)
 	_reachable_cells = cells_in_range
+	_reachable_set.clear()
+	for cell in cells_in_range:
+		_reachable_set[cell] = true
 	for cell in cells_in_range:
 		highlight_terrian_layer.set_cell(cell, 3, Vector2i.ZERO)
 		
-			
 func _clear_highlights() -> void:
 	highlight_terrian_layer.clear()
 	_reachable_cells.clear()
+	_reachable_set.clear()
+	_preview_path.clear()
+	_last_hover_cell = Vector2i(-99999, -99999)
+	debug_manager.set_preview_path(_preview_path)
 	
 	
 # Hex Tiles Debug
