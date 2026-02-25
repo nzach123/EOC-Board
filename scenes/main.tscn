@@ -1,5 +1,6 @@
 [gd_scene format=4 uid="uid://buyyb8fkunewj"]
 
+[ext_resource type="Script" uid="uid://djoufy0r7dl0i" path="res://scripts/camera.gd" id="1_camera"]
 [ext_resource type="Script" uid="uid://dbbir0fxvkybm" path="res://scripts/main.gd" id="1_sugp2"]
 [ext_resource type="TileSet" uid="uid://dhsqomjlhi57t" path="res://resources/hex_tile_set.tres" id="2_sugp2"]
 [ext_resource type="PackedScene" uid="uid://cuq7y8vktda80" path="res://scenes/unit.tscn" id="3_tbgi4"]
@@ -10,7 +11,8 @@
 [ext_resource type="Script" uid="uid://d08o6ug02rhkc" path="res://scripts/mouse_tile_highlight_manager.gd" id="10_choun"]
 [ext_resource type="Script" uid="uid://ciakrjiimov1o" path="res://scripts/path_preview_controller.gd" id="10_ppc"]
 [ext_resource type="Script" uid="uid://dcnynwruubto4" path="res://scripts/unit_movement_executor.gd" id="11_ume"]
-[ext_resource type="Script" uid="uid://djoufy0r7dl0i" path="res://scripts/camera.gd" id="1_camera"]
+[ext_resource type="Script" uid="uid://c6pwgbysr0hbf" path="res://scripts/crisis_tile_logic.gd" id="12_eb6dy"]
+[ext_resource type="Script" uid="uid://bvxj13yj5hias" path="res://scripts/unit_interact_manager.gd" id="13_trceg"]
 
 [node name="Main" type="Node2D" unique_id=2003295805]
 script = ExtResource("1_sugp2")
@@ -64,30 +66,51 @@ script = ExtResource("7_o6xl0")
 [node name="MouseTileHighlightManager" type="Node" parent="Componets" unique_id=878336136]
 script = ExtResource("10_choun")
 
-[node name="Control" type="Control" parent="." unique_id=996680030]
+[node name="CrisisTileLogic" type="Node" parent="Componets" unique_id=758709487]
+script = ExtResource("12_eb6dy")
+
+[node name="UnitInteractManager" type="Node" parent="Componets" unique_id=284916116]
+script = ExtResource("13_trceg")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=996836104]
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=1773642522]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Control" unique_id=810363930]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control" unique_id=454141945]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 1
+anchor_left = 1.0
 anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_left = -124.0
+offset_bottom = 42.0
+grow_horizontal = 0
+theme_override_constants/margin_top = 150
+theme_override_constants/margin_right = 150
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer" unique_id=2113062491]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/MarginContainer" unique_id=642116211]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control/MarginContainer/VBoxContainer" unique_id=640441949]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="NextTurnButton" type="Button" parent="CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1926467902]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Next Turn"
+
+[node name="InteractButton" type="Button" parent="CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer" unique_id=740718200]
 visible = false
 layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Interact"
 
-[node name="Button" type="Button" parent="Control" unique_id=98337223]
-layout_mode = 0
-offset_left = 124.0
-offset_top = 112.0
-offset_right = 221.0
-offset_bottom = 143.0
-text = "NEXT TURN"
+[connection signal="pressed" from="CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer/NextTurnButton" to="Unit" method="_on_next_turn_button_pressed"]

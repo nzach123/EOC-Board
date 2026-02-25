@@ -13,6 +13,10 @@ extends Node2D
 @onready var mousetilehighlighter: MouseTileHighlighter = $Componets/MouseTileHighlightManager
 @onready var highlight_tile_layer: TileMapLayer = $HighlightTileLayer
 
+@onready var interact_manager: UnitInteractManager = $Componets/UnitInteractManager
+@onready var crisis_tile_logic: CrisisTileLogic = $Componets/CrisisTileLogic
+@onready var interact_button: Button = $CanvasLayer/Control/MarginContainer/VBoxContainer/HBoxContainer/InteractButton
+
 @onready var camera: RTSCamera = $Camera2D
 
 func _ready() -> void:
@@ -52,6 +56,13 @@ func _ready() -> void:
 	mousetilehighlighter.highlight_layer = highlight_tile_layer
 	mousetilehighlighter.base_layer = base_terrian_layer
 	nav.path_completed.connect(mousetilehighlighter.clear_destination)
+
+	# 7. Wire interact manager
+	interact_manager.selection_manager = selection
+	interact_manager.crisis_tile_logic = crisis_tile_logic
+	interact_manager.base_layer = base_terrian_layer
+	interact_manager.interact_button = interact_button
+	interact_manager.setup()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
