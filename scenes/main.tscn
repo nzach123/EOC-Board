@@ -5,6 +5,10 @@
 [ext_resource type="PackedScene" uid="uid://cuq7y8vktda80" path="res://scenes/unit.tscn" id="3_tbgi4"]
 [ext_resource type="Script" uid="uid://cx0doo7gqa86i" path="res://scripts/hex_pathfinder.gd" id="6_tefeu"]
 [ext_resource type="Script" uid="uid://ddrif5id3covl" path="res://scripts/unit_debugger_manager.gd" id="7_o6xl0"]
+[ext_resource type="Script" uid="uid://bpj1ykhj8q5cy" path="res://scripts/unit_selection_manager.gd" id="8_sm"]
+[ext_resource type="Script" uid="uid://cb65bwdkemsli" path="res://scripts/movement_range_highlighter.gd" id="9_mrh"]
+[ext_resource type="Script" uid="uid://ciakrjiimov1o" path="res://scripts/path_preview_controller.gd" id="10_ppc"]
+[ext_resource type="Script" uid="uid://dcnynwruubto4" path="res://scripts/unit_movement_executor.gd" id="11_ume"]
 
 [node name="Main" type="Node2D" unique_id=2003295805]
 script = ExtResource("1_sugp2")
@@ -32,11 +36,25 @@ position = Vector2(449, 273)
 position = Vector2(1266, 669)
 zoom = Vector2(0.455, 0.455)
 
-[node name="HexPathfinder" type="Node" parent="." unique_id=2030899562 node_paths=PackedStringArray("tile_layer")]
+[node name="Componets" type="Node" parent="." unique_id=216738941]
+
+[node name="HexPathfinder" type="Node" parent="Componets" unique_id=2030899562 node_paths=PackedStringArray("tile_layer")]
 script = ExtResource("6_tefeu")
-tile_layer = NodePath("../BaseTerrianLayer")
+tile_layer = NodePath("../../BaseTerrianLayer")
 
-[node name="UnitDebugManager" type="Node2D" parent="." unique_id=1964897580]
+[node name="MovementRangeHighlighter" type="Node" parent="Componets" unique_id=1286503250 node_paths=PackedStringArray("highlight_layer", "base_layer")]
+script = ExtResource("9_mrh")
+highlight_layer = NodePath("../../HighlightTerrianLayer")
+base_layer = NodePath("../../BaseTerrianLayer")
+
+[node name="UnitSelectionManager" type="Node" parent="Componets" unique_id=1286503251]
+script = ExtResource("8_sm")
+
+[node name="PathPreviewController" type="Node" parent="Componets" unique_id=1286503252]
+script = ExtResource("10_ppc")
+
+[node name="UnitMovementExecutor" type="Node" parent="Componets" unique_id=1286503253]
+script = ExtResource("11_ume")
+
+[node name="UnitDebugManager" type="Node2D" parent="Componets" unique_id=1964897580]
 script = ExtResource("7_o6xl0")
-
-[node name="MovementHighlight" type="Node" parent="." unique_id=1286503250]
