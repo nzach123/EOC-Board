@@ -6,6 +6,7 @@ var range_highlighter: MovementRangeHighlighter
 var hex_pathfinder: HexPathfinder
 var nav: UnitNavMovement
 var base_layer: TileMapLayer
+var mouse_tile_highlighter: MouseTileHighlighter
 
 var _pending_path_cost: int = 0
 
@@ -36,6 +37,8 @@ func _move_selected_unit_to_mouse_tile() -> void:
 		else:
 			_pending_path_cost += 1
 	nav.move_to_cell(cell)
+	if is_instance_valid(mouse_tile_highlighter):
+		mouse_tile_highlighter.set_destination(cell)
 	range_highlighter.clear()
 
 func _on_unit_arrived() -> void:

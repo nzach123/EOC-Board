@@ -10,6 +10,10 @@ extends Node2D
 @onready var highlighter: MovementRangeHighlighter = $Componets/MovementRangeHighlighter
 @onready var preview: PathPreviewController = $Componets/PathPreviewController
 @onready var executor: UnitMovementExecutor = $Componets/UnitMovementExecutor
+@onready var mousetilehighlighter: MouseTileHighlighter = $Componets/MouseTileHighlightManager
+@onready var highlight_tile_layer: TileMapLayer = $HighlightTileLayer
+
+@onready var camera: RTSCamera = $Camera2D
 
 func _ready() -> void:
 	# 1. Pathfinder
@@ -38,10 +42,16 @@ func _ready() -> void:
 	executor.hex_pathfinder = hex_pathfinder
 	executor.nav = nav
 	executor.base_layer = base_terrian_layer
+	executor.mouse_tile_highlighter = mousetilehighlighter
 	nav.path_completed.connect(executor._on_unit_arrived)
 
 	# 5. When range is cleared, reset preview
 	highlighter.range_cleared.connect(preview.reset)
+	
+	# 6. Setup Mouse Tile Highlighter
+	mousetilehighlighter.highlight_layer = highlight_tile_layer
+	mousetilehighlighter.base_layer = base_terrian_layer
+	nav.path_completed.connect(mousetilehighlighter.clear_destination)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():

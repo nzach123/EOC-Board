@@ -7,8 +7,10 @@
 [ext_resource type="Script" uid="uid://ddrif5id3covl" path="res://scripts/unit_debugger_manager.gd" id="7_o6xl0"]
 [ext_resource type="Script" uid="uid://bpj1ykhj8q5cy" path="res://scripts/unit_selection_manager.gd" id="8_sm"]
 [ext_resource type="Script" uid="uid://cb65bwdkemsli" path="res://scripts/movement_range_highlighter.gd" id="9_mrh"]
+[ext_resource type="Script" uid="uid://d08o6ug02rhkc" path="res://scripts/mouse_tile_highlight_manager.gd" id="10_choun"]
 [ext_resource type="Script" uid="uid://ciakrjiimov1o" path="res://scripts/path_preview_controller.gd" id="10_ppc"]
 [ext_resource type="Script" uid="uid://dcnynwruubto4" path="res://scripts/unit_movement_executor.gd" id="11_ume"]
+[ext_resource type="Script" uid="uid://djoufy0r7dl0i" path="res://scripts/camera.gd" id="1_camera"]
 
 [node name="Main" type="Node2D" unique_id=2003295805]
 script = ExtResource("1_sugp2")
@@ -34,7 +36,7 @@ position = Vector2(449, 273)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=661656610]
 position = Vector2(1266, 669)
-zoom = Vector2(0.455, 0.455)
+script = ExtResource("1_camera")
 
 [node name="Componets" type="Node" parent="." unique_id=216738941]
 
@@ -58,3 +60,34 @@ script = ExtResource("11_ume")
 
 [node name="UnitDebugManager" type="Node2D" parent="Componets" unique_id=1964897580]
 script = ExtResource("7_o6xl0")
+
+[node name="MouseTileHighlightManager" type="Node" parent="Componets" unique_id=878336136]
+script = ExtResource("10_choun")
+
+[node name="Control" type="Control" parent="." unique_id=996680030]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control" unique_id=810363930]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer" unique_id=2113062491]
+visible = false
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Control" unique_id=98337223]
+layout_mode = 0
+offset_left = 124.0
+offset_top = 112.0
+offset_right = 221.0
+offset_bottom = 143.0
+text = "NEXT TURN"
