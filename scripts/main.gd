@@ -2,6 +2,7 @@ extends Node2D
 
 @onready var hex_pathfinder: HexPathfinder = $HexPathfinder
 @onready var nav: UnitNavMovement = $Unit/NavMovement
+@onready var debug_manager: UnitDebugManager = $UnitDebugManager
 
 @onready var base_terrian_layer: TileMapLayer = $BaseTerrianLayer
 @onready var crisis_terrian_layer: TileMapLayer = $CrisisTerrianLayer
@@ -22,7 +23,9 @@ func _ready() -> void:
 	# Wire up nav movement
 	nav.setup(hex_pathfinder)
 	nav.path_completed.connect(_on_unit_arrived)
-	nav.path_failed.connect(func(reason: String): print("Path failed: ", reason))	
+	nav.path_failed.connect(func(reason: String): print("Path failed: ", reason))
+	# Wire up debug manager to receive path updates
+	nav.path_updated.connect(debug_manager._on_unit_path_updated)	
 	
 func _on_unit_arrived()-> void:
 	
@@ -34,6 +37,7 @@ func _on_unit_arrived()-> void:
 
 func _on_unit_left_clicked(unit: Node2D) -> void:
 	selected_unit = unit
+	debug_manager.set_active_unit(unit)
 	print("Selected unit: ", unit.name)
 	_show_movement_range(unit)
 

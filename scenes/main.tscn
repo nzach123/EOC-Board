@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bwlbqrlhj3a4i" path="res://assets/tiles/ElementRenders/Tiles/64/hexagon-pointy-top-darkblue-64.png" id="4_jyhfs"]
 [ext_resource type="Script" uid="uid://updjpn4c1wyo" path="res://scripts/unit_nav_movement.gd" id="5_tbgi4"]
 [ext_resource type="Script" uid="uid://cx0doo7gqa86i" path="res://scripts/hex_pathfinder.gd" id="6_tefeu"]
+[ext_resource type="Script" uid="uid://ddrif5id3covl" path="res://scripts/unit_debugger_manager.gd" id="7_o6xl0"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tbgi4"]
 radius = 31.144823
@@ -32,7 +33,7 @@ collision_enabled = false
 [node name="Unit" type="Node2D" parent="." unique_id=1282189805]
 position = Vector2(449, 273)
 script = ExtResource("3_jyhfs")
-movement_turns = 5
+movement_turns = 8
 
 [node name="Sprite2D" type="Sprite2D" parent="Unit" unique_id=1761147467]
 texture = ExtResource("4_jyhfs")
@@ -53,5 +54,8 @@ zoom = Vector2(0.455, 0.455)
 [node name="HexPathfinder" type="Node" parent="." unique_id=2030899562 node_paths=PackedStringArray("tile_layer")]
 script = ExtResource("6_tefeu")
 tile_layer = NodePath("../BaseTerrianLayer")
+
+[node name="UnitDebugManager" type="Node2D" parent="." unique_id=1964897580]
+script = ExtResource("7_o6xl0")
 
 [connection signal="input_event" from="Unit/ClickArea" to="Unit" method="_on_click_area_input_event"]

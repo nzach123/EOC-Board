@@ -1,7 +1,7 @@
 extends Node2D
 class_name UnitNavMovement
 @onready var unit: Node2D = $".."
-
+signal path_updated(unit: Node2D)
 signal path_started(target_cell: Vector2i)
 signal path_completed()
 signal path_failed(reason: String)
@@ -54,8 +54,7 @@ func move_to_cell(target_cell: Vector2i) -> bool:
 	_waypoint_index = 0
 	_state = State.MOVING
 	path_started.emit(target_cell)
-	if debug_draw:
-		queue_redraw()
+	path_updated.emit(unit)
 	return true
 	
 func move_to_world(target_world: Vector2) -> bool:
@@ -75,22 +74,12 @@ func _process(delta: float) -> void:
 	if unit.global_position.distance_to(target) <= arrival_distance:
 		unit.global_position = target
 		_waypoint_index +=1
+		path_updated.emit(unit)
 		
 func _arrive() -> void:
 	_state = State.IDLE
+	path_updated.emit(unit)
+	path_completed.emit()
 	_waypoint_index = 0
 	_world_waypoints.clear()
 	_current_path.clear()
-	path_completed.emit()
-	if debug_draw:
-		queue_redraw()
-
-func _draw() -> void:
-	var local_path := PackedVector2Array()
-	for world_pos in _world_waypoints:
-		local_path.append(to_local(world_pos))
-		
-	if local_path.size() >= 2:
-		draw_polyline(local_path, Color.YELLOW, 2.0)
-	for lp in local_path:
-		draw_circle(lp, 5.0, Color.RED)
